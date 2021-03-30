@@ -1,4 +1,8 @@
 # pylint: disable=R0902
+"""
+Lovely framework for RSTBot.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"""
 import copy
 import logging
 import threading
@@ -8,7 +12,7 @@ from concurrent.futures import ThreadPoolExecutor
 import httpx
 import socketio
 
-default_logger = logging.getLogger('wechat')
+default_logger = logging.getLogger("wechat")
 
 TEXT_MSG_TYPE = 1
 APP_MSG_TYPE = 49
@@ -118,7 +122,7 @@ class WeChat:
     def _distribute_msg_ctx(self, ctx: WeChatMsg):
         # set self.wxid
         if self.wxid is None:
-            self.logger.info('Set wxid to CurrentWxid.')
+            self.logger.info("Set wxid to CurrentWxid.")
             self.wxid = ctx.CurrentWxid
         for receiver in self._msg_receivers:
             self._pool_submit(receiver, copy.deepcopy(ctx))
@@ -126,7 +130,7 @@ class WeChat:
     def _distribute_event_ctx(self, ctx):
         # set self.wxid
         if self.wxid is None:
-            self.logger.info('Set wxid to CurrentWxid.')
+            self.logger.info("Set wxid to CurrentWxid.")
             self.wxid = ctx.CurrentWxid
         for receiver in self._msg_receivers:
             self._pool_submit(receiver, copy.deepcopy(ctx))
@@ -142,6 +146,7 @@ class WeChat:
 
     def run(self):
         """Start bot"""
+        self.logger.info("Trying to Connect the server...")
         try:
             self.sio.connect(self.url, transports=["websocket"])
         except Exception:
